@@ -1,3 +1,8 @@
+.. image:: https://travis-ci.org/nlesc-nano/CP2K-Parser.svg?branch=master
+   :target: https://travis-ci.org/nlesc-nano/CP2K-Parser
+.. image:: https://img.shields.io/badge/python-3.7-blue.svg
+   :target: https://www.python.org
+
 ############
 CP2K-Parser
 ############
