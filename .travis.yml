@@ -25,11 +25,13 @@ install:
   - hash -r
   - conda config --set always_yes yes --set changeps1 no --set auto_update_conda False
   - conda update -q conda
-  - conda create -y -n cp2kparser python=PYTHON_VERSION
-  - conda activate cp2kparser
-  
+
   # Useful for debugging any issues with conda
   - conda info -a
+  
+  # Install virtual enviroment
+  - conda create -n cp2kparser python=${PYTHON_VERSION}
+  - source activate cp2kparser
   
   # Install the package
   - pip install .[test]
