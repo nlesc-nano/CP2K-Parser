@@ -6,9 +6,9 @@ from setuptools import setup
 
 here = os.path.abspath(os.path.dirname(__file__))
 
-# To update the package version number, edit sbu/__version__.py
+# To update the package version number, edit cp2kparser/__version__.py
 version = {}
-with open(os.path.join(here, 'sbu', '__version__.py')) as f:
+with open(os.path.join(here, 'cp2kparser', '__version__.py')) as f:
     exec(f.read(), version)
 
 with open('README.rst') as readme_file:
@@ -17,7 +17,7 @@ with open('README.rst') as readme_file:
 setup(
     name='CP2K-Parser',
     version=version['__version__'],
-    description=('A package for parsing CP2K input files.'),
+    description=('A package for converting CP2K input files into dictionaries.'),
     long_description=readme + '\n\n',
     author='Bas van Beek',
     author_email='b.f.van.beek@vu.nl',
@@ -31,9 +31,8 @@ setup(
     zip_safe=False,
     keywords=[
         'python-3',
-        'python-3-7',
         'python-3-6',
-        'python-3-5',
+        'python-3-7',
         'dictionary',
         'parsing',
         'cp2k'
@@ -45,7 +44,6 @@ setup(
         'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
         'Natural Language :: English',
         'Programming Language :: Python :: 3 :: Only',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7'
     ],
