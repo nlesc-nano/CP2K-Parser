@@ -1,0 +1,129 @@
+&GLOBAL
+	PROJECT cd68se55_26hcoo
+	RUN_TYPE geo_opt
+	PRINT_LEVEL MEDIUM
+&END GLOBAL
+
+&FORCE_EVAL
+	METHOD FIST
+	&MM
+		&PRINT
+			 &FF_INFO
+			 &END
+		&END
+		&FORCEFIELD
+			IGNORE_MISSING_CRITICAL_PARAMS
+			PARM_FILE_NAME ./nc_ff.pot
+			PARMTYPE CHM
+			DO_NONBONDED
+			SHIFT_CUTOFF .TRUE.
+			&NONBONDED
+				&LENNARD-JONES
+					ATOMS CD CD
+					EPSILON 37.29669
+					SIGMA 1.234
+					RCUT 11.4
+				&END
+				&LENNARD-JONES
+					ATOMS SE SE
+					EPSILON 51.30851
+					SIGMA 4.852
+					RCUT 11.4
+				&END
+				&LENNARD-JONES
+					ATOMS CD SE
+					EPSILON 183.1158
+					SIGMA 2.940
+					RCUT 11.4
+				&END
+				&LENNARD-JONES
+					ATOMS CD O_2
+					EPSILON 220.5809
+					SIGMA 2.471
+					RCUT 11.4
+				&END
+				&LENNARD-JONES
+					ATOMS Se O_2
+					EPSILON 194.0607
+					SIGMA 3.526
+					RCUT 11.4
+				&END
+			 &END NONBONDED
+		&END FORCEFIELD
+		&POISSON
+			&EWALD
+				EWALD_TYPE spme
+				ALPHA .44
+				GMAX 24
+			&END EWALD
+		&END POISSON
+	&END MM
+
+	&SUBSYS
+		&CELL
+			ABC [angstrom] 45.0 45.0 45.0
+			PERIODIC NONE
+		&END CELL
+		&TOPOLOGY
+			CHARGE_BETA
+			COORD_FILE_FORMAT PDB
+			COORD_FILE_NAME cd68se55_26hcoo.xyz.pdb
+			CONNECTIVITY MOL_SET
+			&MOL_SET
+				&MOLECULE
+					NMOL 1
+					CONN_FILE_NAME cd_new.xyz.psf
+				&END
+				&MOLECULE
+					NMOL 1
+					CONN_FILE_NAME se_new.xyz.psf
+				&END
+				&MOLECULE
+					NMOL 26
+					CONN_FILE_NAME formate.xyz.psf
+				&END
+			&END
+			&DUMP_PDB
+			&END
+			&DUMP_PSF
+			&END
+			&CENTER_COORDINATES
+			&END
+		&END TOPOLOGY
+		&PRINT
+			 &TOPOLOGY_INFO
+					PSF_INFO
+			 &END
+		&END
+		&KIND Cd
+			ELEMENT Cd
+		&END
+		&KIND Se
+			ELEMENT Se
+		&END
+		&KIND C_2
+			ELEMENT C
+		&END
+		&KIND O_2
+			ELEMENT O
+		&END
+		&KIND H_
+			ELEMENT H
+		&END
+	 &END SUBSYS
+	&END FORCE_EVAL
+
+&MOTION
+	&MD
+        &THERMOSTAT
+        	TYPE CSVR
+           	&CSVR
+            	TIMECON 250
+           	&END CSVR
+       	&END THERMOSTAT
+       	ENSEMBLE NVT
+       	STEPS 2000
+        TIMESTEP 1.0
+        TEMPERATURE 300.0
+	&END MD
+&END
