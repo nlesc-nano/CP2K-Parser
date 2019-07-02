@@ -30,7 +30,13 @@ setup(
     license="GNU General Public License v3 or later",
     zip_safe=False,
     keywords=[
-        'python-3'
+        'python-3',
+        'python-3-7',
+        'python-3-6',
+        'python-3-5',
+        'dictionary',
+        'parsing',
+        'cp2k'
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
@@ -38,7 +44,10 @@ setup(
         'Topic :: Software Development :: Libraries'
         'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
         'Natural Language :: English',
-        'Programming Language :: Python :: 3 :: Only'
+        'Programming Language :: Python :: 3 :: Only',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7'
     ],
     test_suite='tests',
     install_requires=[],
