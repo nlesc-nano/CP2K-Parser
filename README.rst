@@ -7,7 +7,7 @@
 CP2K-Parser
 ############
 
-A package for parsing CP2K_ input files.
+A package for converting CP2K_ input files into dictionaries.
 
 Installation
 ************
