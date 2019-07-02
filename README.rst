@@ -2,7 +2,7 @@
 CP2K-Parser
 ############
 
-A package for parsing CP2K input files.
+A package for parsing CP2K_ input files.
 
 Installation
 ************
@@ -90,3 +90,5 @@ Usage
             'kind H': {'basis_set': 'DZVP-MOLOPT-SR-GTH-q1', 'potential': 'GTH-PBE-q1'},
             'topology': {'coord_file_name': './geometry.xyz', 'coordinate': 'XYZ'}}},
     'global': {'print_level': 'LOW', 'project': 'example', 'run_type': 'ENERGY_FORCE'}}
+    
+.. _CP2K: https://www.cp2k.org/
