@@ -12,7 +12,7 @@ from cp2kparser.parser import (
 
 __all__: List[str] = []
 
-FILENAME: str = './cp2k_job_opt.in'
+FILENAME: str = 'tests/cp2k_job_opt.in'
 
 
 def test_value_to_float():
@@ -29,7 +29,7 @@ def test_value_to_int():
     assert '1.5' == value_to_int('1.5')
     assert 2 == value_to_int('2')
     assert 2 == value_to_int(2)
-    assert '2.0' == value_to_int(2.0)
+    assert 2 == value_to_int(2.0)
     assert 'test' == value_to_int('test')
 
 
@@ -37,18 +37,19 @@ def test_split_item():
     """Test :func:`.parser.split_item`."""
     assert ('a', '') == split_item('A')
     assert ('a', 'B') == split_item('A B')
-    assert ('a B', 'C') == split_item('A B C')
+    assert ('a', 'B C') == split_item('A B C')
 
 
 def test_parse_multi_keys():
     """Test :func:`.parser.parse_multi_keys`."""
-    assert ('a', 'B') == split_item('A B')
+    assert ('a B') == parse_multi_keys('A B')
     try:
-        split_item('A')
+        parse_multi_keys('A')
     except ValueError:
         pass
     else:
         raise AssertionError
+
 
 def test_read_input():
     """Test :func:`.parser.read_input`."""
