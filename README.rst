@@ -5,9 +5,9 @@
 .. image:: https://img.shields.io/badge/python-3.6-blue.svg
    :target: https://www.python.org
    
-############
-CP2K-Parser
-############
+#################
+CP2K-Parser 1.0.0
+#################
 
 A package for converting CP2K_ input files into dictionaries.
 
