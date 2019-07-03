@@ -1,10 +1,10 @@
 """A module for converted CP2K input files into dictionaries."""
 
-from typing import (Generator, Union, Tuple, Optional, MutableSequence, Typevar)
+from typing import (Generator, Union, Tuple, Optional, MutableSequence, TypeVar)
 
 __all__ = ['read_input']
 
-T = Typevar('T')
+T = TypeVar('T')
 
 
 def value_to_float(item: T) -> Union[T, float]:
