@@ -4,12 +4,14 @@
    :target: https://www.python.org
 .. image:: https://img.shields.io/badge/python-3.6-blue.svg
    :target: https://www.python.org
-   
+.. image:: https://img.shields.io/badge/python-3.5-blue.svg
+   :target: https://www.python.org
+
 #################
 CP2K-Parser 1.0.0
 #################
 
-A package for converting CP2K_ input files into dictionaries.
+A package for converting CP2K_ input files into PLAMS_ compatible dictionaries.
 
 Installation
 ************
@@ -93,9 +95,10 @@ Usage
              'xc': {'xc_functional PBE': {}}},
         'subsys':
             {'cell': {'a': '16.11886919 0.07814137 -0.697284243', 'b': '-0.215317662 4.389405268 1.408951791', 'c': '-0.216126961 1.732808365 9.748961085', 'periodic': 'XYZ'},
-            'kind C': {'basis_set': 'DZVP-MOLOPT-SR-GTH-q4', 'potential': 'GTH-PBE-q4'},
-            'kind H': {'basis_set': 'DZVP-MOLOPT-SR-GTH-q1', 'potential': 'GTH-PBE-q1'},
-            'topology': {'coord_file_name': './geometry.xyz', 'coordinate': 'XYZ'}}},
+             'kind C': {'basis_set': 'DZVP-MOLOPT-SR-GTH-q4', 'potential': 'GTH-PBE-q4'},
+             'kind H': {'basis_set': 'DZVP-MOLOPT-SR-GTH-q1', 'potential': 'GTH-PBE-q1'},
+             'topology': {'coord_file_name': './geometry.xyz', 'coordinate': 'XYZ'}}},
     'global': {'print_level': 'LOW', 'project': 'example', 'run_type': 'ENERGY_FORCE'}}
-    
+
 .. _CP2K: https://www.cp2k.org/
+.. _PLAMS: https://www.scm.com/doc/plams/index.html
