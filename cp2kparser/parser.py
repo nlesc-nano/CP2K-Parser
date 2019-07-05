@@ -1,4 +1,8 @@
-"""A module for converting CP2K_ input files into PLAMS_ compatible dictionaries.
+"""
+cp2kparser.parser
+=================
+
+A module for converting CP2K_ input files into PLAMS_ compatible dictionaries.
 
 The CP2K inputfile conversion is initiated by supplying the filename to :func:`.read_input`:
 
