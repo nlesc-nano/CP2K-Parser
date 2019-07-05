@@ -103,3 +103,4 @@ venv.bak/
 # mypy
 .mypy_cache/
 docs_out/
+.DS_Store
