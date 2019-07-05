@@ -4,6 +4,8 @@
    :target: https://www.python.org
 .. image:: https://img.shields.io/badge/python-3.6-blue.svg
    :target: https://www.python.org
+.. image:: https://img.shields.io/badge/python-3.5-blue.svg
+   :target: https://www.python.org
 
 #################
 CP2K-Parser 1.0.0
