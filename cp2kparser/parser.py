@@ -1,5 +1,51 @@
-"""A module for converted CP2K input files into dictionaries."""
+"""A module for converting CP2K_ input files into PLAMS_ compatible dictionaries.
 
+The CP2K inputfile conversion is initiated by supplying the filename to :func:`.read_input`:
+
+.. code:: python
+
+    >>> import cp2kparser
+
+    >>> filename = 'my_cp2k_input.inp'
+    >>> cp2k_dict = cp2kparser.read_input(filename)
+
+    >>> print(type(cp2k_dict))
+    <class 'dict'>
+
+
+.. _CP2K: https://www.cp2k.org/
+.. _PLAMS: https://www.scm.com/doc/plams/index.html
+
+Index
+-----
+
+.. currentmodule:: cp2kparser.parser
+.. autosummary::
+
+    value_to_float
+    value_to_int
+    split_str
+    parse_multi_keys
+    parse_header
+    parse_block
+    recursive_update
+    read_input
+
+Functions
+---------
+
+.. autofunction:: cp2kparser.parser.value_to_float
+.. autofunction:: cp2kparser.parser.value_to_int
+.. autofunction:: cp2kparser.parser.split_str
+.. autofunction:: cp2kparser.parser.parse_multi_keys
+.. autofunction:: cp2kparser.parser.parse_header
+.. autofunction:: cp2kparser.parser.parse_block
+.. autofunction:: cp2kparser.parser.recursive_update
+.. autofunction:: cp2kparser.parser.read_input
+
+"""
+
+from pathlib import PurePath
 from typing import (Generator, Union, Tuple, Optional, MutableSequence, TypeVar)
 
 __all__ = ['read_input']
@@ -28,9 +74,9 @@ def value_to_float(item: T) -> Union[T, float]:
 
     Returns
     -------
-    :class:`float` or :class:`str`
+    :class:`float` or :class:`object`
         A float constructed from **value**.
-        Returns **value** as string if a :exc:`ValueError` is raised.
+        Returns the unmodified **value** if a :exc:`ValueError` is raised.
 
     """
     try:
@@ -60,9 +106,9 @@ def value_to_int(item: T) -> Union[T, int]:
 
     Returns
     -------
-    :class:`int` or :class:`str`
+    :class:`int` or :class:`object`
         An integer constructed from **value**.
-        Returns **value** as string if a :exc:`ValueError` is raised.
+        Returns the unmodified **value** if a :exc:`ValueError` is raised.
 
     """
     try:
@@ -71,8 +117,8 @@ def value_to_int(item: T) -> Union[T, int]:
         return item
 
 
-def split_item(item: str,
-               sep: Optional[str] = None) -> Tuple[str, str]:
+def split_str(item: str,
+              sep: Optional[str] = None) -> Tuple[str, str]:
     """Split a string into a key and a value.
 
     The first word in the to-be returned key is decapitalized if it contains any spaces.
@@ -81,9 +127,9 @@ def split_item(item: str,
     --------
     .. code:: python
 
-        >>> out1 = split_item('A')
-        >>> out2 = split_item('A B')
-        >>> out3 = split_item('A B C')
+        >>> out1 = split_str('A')
+        >>> out2 = split_str('A B')
+        >>> out3 = split_str('A B C')
         >>> print(out1, out2, out3)
         ('a', '') ('a', 'B') ('a', 'B C')
 
@@ -101,7 +147,7 @@ def split_item(item: str,
     -------
     :class:`tuple` [:class:`str`, :class:`str`]
         A tuple of two string created by splitting **item**.
-        The first word of the first string is decapitalized.
+        The first string is decapitalized.
 
     """
     sep = sep or ' '
@@ -163,18 +209,18 @@ def parse_multi_keys(item: str,
 def parse_header(input_gen: Generator,
                  item: str,
                  container: Union[dict, MutableSequence]) -> None:
-    """Parse CP2K headers.
+    r"""Parse CP2K headers.
 
     Parameters
     ----------
-    input_gen : :class:`.abc.Generator`
+    input_gen : :class:`collections.abc.Generator`
         A generator looping over a sanitized CP2K input file
         Tabs (``"\t"``), new lines  (``"\n"``) and trailing whitespaces are expected to be removed.
 
     item : :class:`str`
         A string containing a key and value.
 
-    container : :class:`dict` or :class:`.abc.MutableSequence`
+    container : :class:`dict` or :class:`collections.abc.MutableSequence`
         A to-be filled dictionary or mutable sequence.
 
     """
@@ -209,11 +255,11 @@ def parse_block(item: str,
     item : :class:`str`
         A string containing a key and value.
 
-    container : :class:`dict` or :class:`.abc.MutableSequence`
+    container : :class:`dict` or :class:`collections.abc.MutableSequence`
         A to-be filled dictionary or mutable sequence.
 
     """
-    key, value = split_item(item)
+    key, value = split_str(item)
     if '.' in value:
         value = value_to_float(value)
     else:
@@ -223,15 +269,15 @@ def parse_block(item: str,
 
 def recursive_update(input_gen: Generator,
                      container: Union[dict, MutableSequence]) -> None:
-    """Update **container** an a recursive manner.
+    r"""Update **container** an a recursive manner.
 
     Parameters
     ----------
-    input_gen : :class:`.abc.Generator`
-        A generator looping over a sanitized CP2K input file
+    input_gen : :class:`collections.abc.Generator`
+        A generator looping over a sanitized CP2K input file.
         Tabs (``"\t"``), new lines  (``"\n"``) and trailing whitespaces are expected to be removed.
 
-    container : :class:`dict` or :class:`.abc.MutableSequence`
+    container : :class:`dict` or :class:`collections.abc.MutableSequence`
         A to-be filled dictionary or mutable sequence.
 
     """
@@ -244,8 +290,100 @@ def recursive_update(input_gen: Generator,
             return
 
 
-def read_input(filename: str) -> dict:
+def read_input(filename: Union[str, bytes, PurePath]) -> dict:
     """Read a CP2K input file and convert it into a dictionary.
+
+    Examples
+    --------
+    .. code:: python
+
+        >>> import cp2kparser
+
+        >>> filename = 'my_cp2k_input.inp'
+        >>> print(open(filename).read())
+        &FORCE_EVAL
+            &DFT
+                BASIS_SET_FILE_NAME  /path/to/basis
+                &MGRID
+                    CUTOFF  400
+                    NGRIDS  4
+                &END
+                &POISSON
+                &END
+                &LOCALIZE T
+                &END
+                POTENTIAL_FILE_NAME  /path/to/potential
+                &QS
+                    METHOD  GPW
+                &END
+                &SCF
+                    EPS_SCF  1e-06
+                    MAX_SCF  200
+                &END
+                &XC
+                    &XC_FUNCTIONAL PBE
+                    &END
+                &END
+            &END
+            &SUBSYS
+                &CELL
+                    A  16.11886919 0.07814137 -0.697284243
+                    B  -0.215317662 4.389405268 1.408951791
+                    C  -0.216126961 1.732808365 9.748961085
+                    PERIODIC  XYZ
+                &END
+                &KIND  C
+                    BASIS_SET  DZVP-MOLOPT-SR-GTH-q4
+                    POTENTIAL  GTH-PBE-q4
+                &END
+                &KIND  H
+                    BASIS_SET  DZVP-MOLOPT-SR-GTH-q1
+                    POTENTIAL  GTH-PBE-q1
+                &END
+                &TOPOLOGY
+                    COORD_FILE_NAME  ./geometry.xyz
+                    COORDINATE  XYZ
+                &END
+            &END
+        &END
+
+        &GLOBAL
+            PRINT_LEVEL  LOW
+            PROJECT  example
+            RUN_TYPE  ENERGY_FORCE
+        &END
+
+        >>> cp2k_dict = cp2kparser.read_input(filename)
+        >>> print(cp2k_dict)
+        {'force_eval':
+            {'dft':
+                {'basis_set_file_name': '/path/to/basis',
+                 'mgrid': {'cutoff': 400, 'ngrids': 4},
+                 'poisson': {},
+                 'localize T': {},
+                 'potential_file_name': '/path/to/potential',
+                 'qs': {'method': 'GPW'},
+                 'scf': {'eps_scf': '1e-06', 'max_scf': 200},
+                 'xc': {'xc_functional PBE': {}}},
+            'subsys':
+                {'cell':
+                    {'a': '16.11886919 0.07814137 -0.697284243',
+                     'b': '-0.215317662 4.389405268 1.408951791',
+                     'c': '-0.216126961 1.732808365 9.748961085',
+                     'periodic': 'XYZ'},
+                 'kind C':
+                     {'basis_set': 'DZVP-MOLOPT-SR-GTH-q4',
+                      'potential': 'GTH-PBE-q4'},
+                 'kind H':
+                     {'basis_set': 'DZVP-MOLOPT-SR-GTH-q1',
+                      'potential': 'GTH-PBE-q1'},
+                 'topology':
+                     {'coord_file_name': './geometry.xyz',
+                      'coordinate': 'XYZ'}}},
+        'global':
+            {'print_level': 'LOW',
+             'project': 'example',
+             'run_type': 'ENERGY_FORCE'}}
 
     Parameters
     ----------
@@ -255,16 +393,16 @@ def read_input(filename: str) -> dict:
     Returns
     -------
     :class:`dict`
-        A dictionary constructed from **filename**.
-        Duplicate keys are converted into a list of dictionaries.
+        A (nested) dictionary constructed from **filename**.
+        Duplicate keys are converted into a lists of dictionaries.
 
     """
+    def _sanitize_line(item: str) -> str:
+        """Sanitize and return a single line from **filename**."""
+        return item.rstrip('\n').replace('\t', '').lstrip(' ')
+
     with open(filename, 'r') as f:
-        input_list = []
-        for i in f:
-            if i == '\n':
-                continue
-            input_list.append(i.rstrip('\n').replace('\t', '').lstrip(' '))
+        input_list = [_sanitize_line(item) for item in f if item != '\n']
 
     # Fill the to-be returned dictionary in a recursive manner.
     ret = {}
