@@ -206,7 +206,7 @@ def parse_multi_keys(item: str,
     return ''.join((i1, sep, i2))
 
 
-def parse_header(input_gen: Generator,
+def parse_header(input_gen: Generator[str, None, None],
                  item: str,
                  container: Union[dict, MutableSequence]) -> None:
     r"""Parse CP2K headers.
@@ -218,7 +218,7 @@ def parse_header(input_gen: Generator,
         Tabs (``"\t"``), new lines  (``"\n"``) and trailing whitespaces are expected to be removed.
 
     item : :class:`str`
-        A string containing a key and value.
+        A string containing the header key.
 
     container : :class:`dict` or :class:`collections.abc.MutableSequence`
         A to-be filled dictionary or mutable sequence.
@@ -267,7 +267,7 @@ def parse_block(item: str,
     container[key] = value
 
 
-def recursive_update(input_gen: Generator,
+def recursive_update(input_gen: Generator[str, None, None],
                      container: Union[dict, MutableSequence]) -> None:
     r"""Update **container** an a recursive manner.
 
