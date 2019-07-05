@@ -2,11 +2,8 @@
 
 import os
 import textwrap
-from typing import List
 
 import pycodestyle  # formerly known as pep8
-
-__all__: List[str] = []
 
 
 def test_pep8_conformance() -> None:
