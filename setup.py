@@ -17,7 +17,7 @@ with open('README.rst') as readme_file:
 setup(
     name='CP2K-Parser',
     version=version['__version__'],
-    description=('A package for converting CP2K input files into dictionaries.'),
+    description=('A package for converting CP2K input files into PLAMS-compatible dictionaries.'),
     long_description=readme + '\n\n',
     author='Bas van Beek',
     author_email='b.f.van.beek@vu.nl',
