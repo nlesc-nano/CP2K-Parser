@@ -102,5 +102,12 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# CP2K-Parser
 docs_out/
+
+# macOS
 .DS_Store
+
+# Visual Studio Code
+.vscode/

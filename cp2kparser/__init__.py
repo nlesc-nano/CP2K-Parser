@@ -9,7 +9,7 @@ Installation
 
 CP2K-Parser can be installed as following:
 
-*  PyPi: ``pip install git+https://github.com/nlesc-nano/CP2K-Parser@master --upgrade``
+*  PyPi: ``pip install CP2K-parser --upgrade``
 
 Usage
 *****
