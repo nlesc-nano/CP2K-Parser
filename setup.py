@@ -22,7 +22,7 @@ setup(
     long_description_content_type='text/x-rst',
     author='Bas van Beek',
     author_email='b.f.van.beek@vu.nl',
-    url='https://github.com/nlesc-nano/CP2K-Parser',
+    url='https://github.com/nlesc-nano/CP2K-Parser/releases/tag/v1.0',
     package_dir={'cp2kparser': 'cp2kparser'},
     packages=[
         'cp2kparser',
