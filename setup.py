@@ -19,6 +19,7 @@ setup(
     version=version['__version__'],
     description=('A package for converting CP2K input files into PLAMS-compatible dictionaries.'),
     long_description=readme + '\n\n',
+    long_description_content_type='text/x-rst',
     author='Bas van Beek',
     author_email='b.f.van.beek@vu.nl',
     url='https://github.com/nlesc-nano/CP2K-Parser',
@@ -27,7 +28,7 @@ setup(
         'cp2kparser',
     ],
     include_package_data=True,
-    license="GNU General Public License v3 or later",
+    license="GNU General Public License v3 or later (GPLv3+)",
     zip_safe=False,
     keywords=[
         'python-3',
@@ -41,7 +42,7 @@ setup(
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
-        'Topic :: Software Development :: Libraries'
+        'Topic :: Software Development :: Libraries',
         'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
         'Natural Language :: English',
         'Programming Language :: Python :: 3 :: Only',

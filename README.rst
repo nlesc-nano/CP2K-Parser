@@ -1,10 +1,15 @@
 .. image:: https://travis-ci.org/nlesc-nano/CP2K-Parser.svg?branch=master
    :target: https://travis-ci.org/nlesc-nano/CP2K-Parser
-.. image:: https://img.shields.io/badge/python-3.7-blue.svg
+   
+| 
+
+.. image:: https://img.shields.io/badge/python-3.5-blue.svg
    :target: https://www.python.org
+   
 .. image:: https://img.shields.io/badge/python-3.6-blue.svg
    :target: https://www.python.org
-.. image:: https://img.shields.io/badge/python-3.5-blue.svg
+   
+.. image:: https://img.shields.io/badge/python-3.7-blue.svg
    :target: https://www.python.org
 
 CP2K-Parser 1.0.0
@@ -17,7 +22,7 @@ Installation
 
 CP2K-Parser can be installed as following:
 
-*  PyPi: ``pip install git+https://github.com/nlesc-nano/CP2K-Parser@master --upgrade``
+*  PyPi: ``pip install CP2K-Parser --upgrade``
 
 Usage
 *****
