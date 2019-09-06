@@ -37,7 +37,8 @@ setup(
         'python-3-7',
         'dictionary',
         'parsing',
-        'cp2k'
+        'cp2k',
+        'plams'
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',

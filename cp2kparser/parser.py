@@ -154,7 +154,7 @@ def split_str(item: str,
         The first string is decapitalized.
 
     """
-    sep = sep or ' '
+    sep = sep if sep is not None else ' '
     try:
         key, value = item.split(sep, maxsplit=1)
     except ValueError:
@@ -204,10 +204,10 @@ def parse_multi_keys(item: str,
         Raised if **item** does not contain any whitespaces.
 
     """
-    sep = sep or ' '
+    sep = sep if sep is not None else ' '
     i1, i2 = item.split(sep, maxsplit=1)
     i1 = i1.lstrip('&').lower()
-    return ''.join((i1, sep, i2))
+    return sep.join((i1, i2))
 
 
 def parse_header(input_gen: Generator[str, None, None],
@@ -238,7 +238,7 @@ def parse_header(input_gen: Generator[str, None, None],
         container[key].append({})
         recursive_update(input_gen, container[key][-1])
 
-    # A duplicate key; convert container[key] into a list of dictionaries
+    # container[key] already exists; convert container[key] into a list of dictionaries
     elif key in container:
         value_old = container[key]
         container[key] = [value_old, {}]
@@ -271,6 +271,28 @@ def parse_block(item: str,
     container[key] = value
 
 
+def parse_coord_block(input_gen: Generator[str, None, None],
+                      container: Union[dict, MutableSequence]) -> None:
+    """Parse ``"coord"`` blocks.
+
+    Parameters
+    ----------
+    item : :class:`str`
+        A string containing a key and value.
+
+    container : :class:`dict` or :class:`collections.abc.MutableSequence`
+        A to-be filled dictionary or mutable sequence.
+
+    """
+    item = next(input_gen)
+    container['coord'] = {}
+    container['coord']['_1'] = coord = []
+    while item.lower() != '&end':
+        coord.append(item)
+        item = next(input_gen)
+    return
+
+
 def recursive_update(input_gen: Generator[str, None, None],
                      container: Union[dict, MutableSequence]) -> None:
     r"""Update **container** an a recursive manner.
@@ -286,11 +308,13 @@ def recursive_update(input_gen: Generator[str, None, None],
 
     """
     for item in input_gen:
-        if item[0] == '&' and item[0:4].lower() != '&end':  # Beginning of a block
+        if item.lower() == '&coord':
+            parse_coord_block(input_gen, container)
+        elif item[0] == '&' and item[0:4].lower() != '&end':
             parse_header(input_gen, item, container)
-        elif item[0:4].lower() != '&end':  # End of a block
+        elif item[0:4].lower() != '&end':
             parse_block(item, container)
-        else:
+        else:  # End of a block
             return
 
 
@@ -403,7 +427,7 @@ def read_input(filename: Union[str, bytes, PurePath]) -> dict:
     """
     def _sanitize_line(item: str) -> str:
         """Sanitize and return a single line from **filename**."""
-        return item.rstrip('\n').replace('\t', '').lstrip(' ')
+        return item.rstrip('\n').rstrip().replace('\t', '').lstrip(' ')
 
     with open(filename, 'r') as f:
         input_list = [_sanitize_line(item) for item in f if item != '\n']
