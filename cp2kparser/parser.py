@@ -121,8 +121,7 @@ def value_to_int(item: T) -> Union[T, int]:
         return item
 
 
-def split_str(item: str,
-              sep: Optional[str] = None) -> Tuple[str, str]:
+def split_str(item: str, sep: Optional[str] = None) -> Tuple[str, str]:
     """Split a string into a key and a value.
 
     The first word in the to-be returned key is decapitalized if it contains any spaces.
@@ -166,11 +165,10 @@ def split_str(item: str,
     else:
         key = key.lower()
 
-    return key, value
+    return key.strip().rstrip(), value.strip().rstrip()
 
 
-def parse_multi_keys(item: str,
-                     sep: Optional[str] = None) -> str:
+def parse_multi_keys(item: str, sep: Optional[str] = None) -> str:
     """Parse keys that contain one or more spaces (see **sep**).
 
     The first word in the to-be returned key is decapitalized.
@@ -207,7 +205,7 @@ def parse_multi_keys(item: str,
     sep = sep if sep is not None else ' '
     i1, i2 = item.split(sep, maxsplit=1)
     i1 = i1.lstrip('&').lower()
-    return sep.join((i1, i2))
+    return sep.join((i1.strip().rstrip(), i2.strip().rstrip()))
 
 
 def parse_header(input_gen: Generator[str, None, None],
