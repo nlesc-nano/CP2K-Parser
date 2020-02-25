@@ -38,19 +38,19 @@ Index
 Functions
 ---------
 
-.. autofunction:: cp2kparser.parser.value_to_float
-.. autofunction:: cp2kparser.parser.value_to_int
-.. autofunction:: cp2kparser.parser.split_str
-.. autofunction:: cp2kparser.parser.parse_multi_keys
-.. autofunction:: cp2kparser.parser.parse_header
-.. autofunction:: cp2kparser.parser.parse_block
-.. autofunction:: cp2kparser.parser.recursive_update
-.. autofunction:: cp2kparser.parser.read_input
+.. autofunction:: value_to_float
+.. autofunction:: value_to_int
+.. autofunction:: split_str
+.. autofunction:: parse_multi_keys
+.. autofunction:: parse_header
+.. autofunction:: parse_block
+.. autofunction:: recursive_update
+.. autofunction:: read_input
 
 """
 
-from pathlib import PurePath
-from typing import (Generator, Union, Tuple, Optional, MutableSequence, TypeVar)
+from os import PathLike
+from typing import Generator, Union, Tuple, Optional, MutableSequence, TypeVar
 
 __all__ = ['read_input']
 
@@ -159,6 +159,8 @@ def split_str(item: str, sep: Optional[str] = None) -> Tuple[str, str]:
     except ValueError:
         key = item
         value = ''
+    else:
+        value = value.strip().rstrip()
 
     if sep in key:
         key = parse_multi_keys(key)
@@ -316,7 +318,7 @@ def recursive_update(input_gen: Generator[str, None, None],
             return
 
 
-def read_input(filename: Union[str, bytes, PurePath]) -> dict:
+def read_input(filename: Union[str, bytes, PathLike]) -> dict:
     """Read a CP2K input file and convert it into a dictionary.
 
     Examples
