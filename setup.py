@@ -14,6 +14,13 @@ with open(os.path.join(here, 'cp2kparser', '__version__.py')) as f:
 with open('README.rst') as readme_file:
     readme = readme_file.read()
 
+tests_require = [
+    'pytest',
+    'pytest-cov',
+    'pytest-flake8',
+    'pytest-pydocstyle',
+]
+
 setup(
     name='CP2K-Parser',
     version=version['__version__'],
@@ -59,12 +66,8 @@ setup(
     setup_requires=[
         'pytest-runner'
     ],
-    tests_require=[
-        'pytest',
-        'pytest-cov',
-        'pycodestyle',
-    ],
+    tests_require=tests_require,
     extras_require={
-        'test': ['pytest', 'pytest-cov', 'pycodestyle']
+        'test': tests_require,
     }
 )
