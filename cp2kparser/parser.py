@@ -49,15 +49,18 @@ Functions
 
 """
 
-from pathlib import PurePath
-from typing import (Generator, Union, Tuple, Optional, MutableSequence, TypeVar)
+from __future__ import annotations
+
+import os
+from typing import TypeVar, Any
+from collections.abc import MutableMapping, Iterator
 
 __all__ = ['read_input']
 
-T = TypeVar('T')
+_T = TypeVar('_T')
 
 
-def value_to_float(item: T) -> Union[T, float]:
+def value_to_float(item: _T) -> _T | float:
     """Try to convert a string, **item**, into a float.
 
     Return **item** without any type conversion if a :exc:`ValueError` is raised.
@@ -78,7 +81,7 @@ def value_to_float(item: T) -> Union[T, float]:
 
     Returns
     -------
-    :class:`float` or :class:`object`
+    :class:`float` or :class:`str`
         A float constructed from **value**.
         Returns the unmodified **value** if a :exc:`ValueError` is raised.
 
@@ -89,7 +92,7 @@ def value_to_float(item: T) -> Union[T, float]:
         return item
 
 
-def value_to_int(item: T) -> Union[T, int]:
+def value_to_int(item: _T) -> _T | int:
     """Try to convert a string, **item**, into an integer.
 
     Return **item** without any type conversion if a :exc:`ValueError` is raised.
@@ -110,7 +113,7 @@ def value_to_int(item: T) -> Union[T, int]:
 
     Returns
     -------
-    :class:`int` or :class:`object`
+    :class:`int` or :class:`str`
         An integer constructed from **value**.
         Returns the unmodified **value** if a :exc:`ValueError` is raised.
 
@@ -121,8 +124,7 @@ def value_to_int(item: T) -> Union[T, int]:
         return item
 
 
-def split_str(item: str,
-              sep: Optional[str] = None) -> Tuple[str, str]:
+def split_str(item: str, sep: None | str = None) -> tuple[str, str]:
     """Split a string into a key and a value.
 
     The first word in the to-be returned key is decapitalized if it contains any spaces.
@@ -141,15 +143,14 @@ def split_str(item: str,
     ----------
     item : :class:`str`
         A string.
-
-    sep : :class:`str`
+    sep : :class:`str`, optional
         The delimiter according which to split **item**.
         ``None`` (the default value) means split according to any whitespace,
         and discard empty strings from the result.
 
     Returns
     -------
-    :class:`tuple` [:class:`str`, :class:`str`]
+    :class:`tuple[str, str] <tuple>`
         A tuple of two string created by splitting **item**.
         The first string is decapitalized.
 
@@ -169,8 +170,7 @@ def split_str(item: str,
     return key, value
 
 
-def parse_multi_keys(item: str,
-                     sep: Optional[str] = None) -> str:
+def parse_multi_keys(item: str, sep: None | str = None) -> str:
     """Parse keys that contain one or more spaces (see **sep**).
 
     The first word in the to-be returned key is decapitalized.
@@ -187,8 +187,7 @@ def parse_multi_keys(item: str,
     ----------
     item : :class:`str`
         A string containing at least a single space.
-
-    sep : :class:`str`
+    sep : :class:`str`, optional
         The delimiter according which to split **item**.
         ``None`` (the default value) means split according to any whitespace,
         and discard empty strings from the result.
@@ -210,22 +209,22 @@ def parse_multi_keys(item: str,
     return sep.join((i1, i2))
 
 
-def parse_header(input_gen: Generator[str, None, None],
-                 item: str,
-                 container: Union[dict, MutableSequence]) -> None:
+def parse_header(
+    input_gen: Iterator[str],
+    item: str,
+    container: MutableMapping[str, Any],
+) -> None:
     r"""Parse CP2K headers.
 
     Parameters
     ----------
-    input_gen : :class:`collections.abc.Generator`
+    input_gen : :class:`Iterator[str] <collections.abc.Iterator>`
         A generator looping over a sanitized CP2K input file
         Tabs (``"\t"``), new lines  (``"\n"``) and trailing whitespaces are expected to be removed.
-
     item : :class:`str`
         A string containing the header key.
-
-    container : :class:`dict` or :class:`collections.abc.MutableSequence`
-        A to-be filled dictionary or mutable sequence.
+    container : :class:`MutableMapping[str, Any] <collections.abc.MutableMapping>`
+        A to-be filled dictionary.
 
     """
     if ' ' in item:
@@ -250,61 +249,63 @@ def parse_header(input_gen: Generator[str, None, None],
         recursive_update(input_gen, container[key])
 
 
-def parse_block(item: str,
-                container: Union[dict, MutableSequence]) -> None:
+def parse_block(item: str, container: MutableMapping[str, float | str]) -> None:
     """Parse CP2K blocks.
 
     Parameters
     ----------
     item : :class:`str`
         A string containing a key and value.
-
-    container : :class:`dict` or :class:`collections.abc.MutableSequence`
-        A to-be filled dictionary or mutable sequence.
+    container : :class:`MutableMapping[str, Any] <collections.abc.MutableMapping>`
+        A to-be filled dictionary.
 
     """
-    key, value = split_str(item)
-    if '.' in value:
-        value = value_to_float(value)
+    key, _value = split_str(item)
+    if '.' in _value:
+        value: str | float = value_to_float(_value)
     else:
-        value = value_to_int(value)
+        value = value_to_int(_value)
     container[key] = value
 
 
-def parse_coord_block(input_gen: Generator[str, None, None],
-                      container: Union[dict, MutableSequence]) -> None:
+def parse_coord_block(
+    input_gen: Iterator[str],
+    container: MutableMapping[str, MutableMapping[str, list[str]]],
+) -> None:
     """Parse ``"coord"`` blocks.
 
     Parameters
     ----------
-    item : :class:`str`
+    input_gen : :class:`Iterator[str] <collections.abc.Iterator>`
         A string containing a key and value.
-
-    container : :class:`dict` or :class:`collections.abc.MutableSequence`
-        A to-be filled dictionary or mutable sequence.
+    container : :class:`MutableMapping[str, Any] <collections.abc.MutableMapping>`
+        A to-be filled dictionary.
 
     """
+    coord: list[str] = []
+
     item = next(input_gen)
     container['coord'] = {}
-    container['coord']['_1'] = coord = []
+    container['coord']['_1'] = coord
     while item.lower() != '&end':
         coord.append(item)
         item = next(input_gen)
     return
 
 
-def recursive_update(input_gen: Generator[str, None, None],
-                     container: Union[dict, MutableSequence]) -> None:
+def recursive_update(
+    input_gen: Iterator[str],
+    container: MutableMapping[str, Any],
+) -> None:
     r"""Update **container** an a recursive manner.
 
     Parameters
     ----------
-    input_gen : :class:`collections.abc.Generator`
+    input_gen : :class:`Iterator[str] <collections.abc.Iterator>`
         A generator looping over a sanitized CP2K input file.
         Tabs (``"\t"``), new lines  (``"\n"``) and trailing whitespaces are expected to be removed.
-
-    container : :class:`dict` or :class:`collections.abc.MutableSequence`
-        A to-be filled dictionary or mutable sequence.
+    container : :class:`MutableMapping[str, Any] <collections.abc.MutableMapping>`
+        A to-be filled dictionary.
 
     """
     for item in input_gen:
@@ -318,7 +319,7 @@ def recursive_update(input_gen: Generator[str, None, None],
             return
 
 
-def read_input(filename: Union[str, bytes, PurePath]) -> dict:
+def read_input(filename: str | bytes | os.PathLike[Any]) -> dict[str, Any]:
     """Read a CP2K input file and convert it into a dictionary.
 
     Examples
@@ -338,7 +339,7 @@ def read_input(filename: Union[str, bytes, PurePath]) -> dict:
                 &END
                 &POISSON
                 &END
-                &LOCALIZE T
+                &LOCALIZE _T
                 &END
                 POTENTIAL_FILE_NAME  /path/to/potential
                 &QS
@@ -388,7 +389,7 @@ def read_input(filename: Union[str, bytes, PurePath]) -> dict:
                 {'basis_set_file_name': '/path/to/basis',
                  'mgrid': {'cutoff': 400, 'ngrids': 4},
                  'poisson': {},
-                 'localize T': {},
+                 'localize _T': {},
                  'potential_file_name': '/path/to/potential',
                  'qs': {'method': 'GPW'},
                  'scf': {'eps_scf': '1e-06', 'max_scf': 200},
@@ -415,12 +416,12 @@ def read_input(filename: Union[str, bytes, PurePath]) -> dict:
 
     Parameters
     ----------
-    filename : :class:`str`
+    filename : :class:`str`, :class:`bytes` or :class:`os.PathLike`
         The path+filename of the CP2K input file.
 
     Returns
     -------
-    :class:`dict`
+    :class:`dict[str, Any] <dict>`
         A (nested) dictionary constructed from **filename**.
         Duplicate keys are converted into a lists of dictionaries.
 
@@ -433,8 +434,6 @@ def read_input(filename: Union[str, bytes, PurePath]) -> dict:
         input_list = [_sanitize_line(item) for item in f if item != '\n']
 
     # Fill the to-be returned dictionary in a recursive manner.
-    ret = {}
-    input_gen = (i for i in input_list)
-    recursive_update(input_gen, ret)
-
+    ret: dict[str, Any] = {}
+    recursive_update(iter(input_list), ret)
     return ret
