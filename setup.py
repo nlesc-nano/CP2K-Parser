@@ -28,7 +28,7 @@ setup(
         'cp2kparser',
     ],
     include_package_data=True,
-    license="GNU General Public License v3 or later (GPLv3+)",
+    license='Apache Software License',
     zip_safe=False,
     keywords=[
         'python-3',
@@ -44,7 +44,7 @@ setup(
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Libraries',
-        'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
+        'License :: OSI Approved :: Apache Software License',
         'Natural Language :: English',
         'Programming Language :: Python :: 3 :: Only',
         'Programming Language :: Python :: 3.5',
