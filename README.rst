@@ -7,7 +7,7 @@
 .. image:: https://img.shields.io/badge/python-3.10-blue.svg
    :target: https://docs.python.org/3.10/
 
-CP2K-Parser 1.0.1
+CP2K-Parser 2.0.0
 #################
 
 A package for converting CP2K_ input files into PLAMS_ compatible dictionaries.
