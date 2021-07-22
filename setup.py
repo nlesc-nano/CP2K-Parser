@@ -14,6 +14,13 @@ with open(os.path.join(here, 'cp2kparser', '__version__.py')) as f:
 with open('README.rst') as readme_file:
     readme = readme_file.read()
 
+tests_require = [
+    'pytest',
+    'pytest-cov',
+    'pytest-flake8',
+    'pytest-pydocstyle',
+]
+
 setup(
     name='CP2K-Parser',
     version=version['__version__'],
@@ -24,45 +31,43 @@ setup(
     author_email='b.f.van.beek@vu.nl',
     url='https://github.com/nlesc-nano/CP2K-Parser',
     package_dir={'cp2kparser': 'cp2kparser'},
-    packages=[
-        'cp2kparser',
-    ],
+    package_data={'cp2kparser': ['py.typed']},
+    packages=['cp2kparser'],
     include_package_data=True,
-    license="GNU General Public License v3 or later (GPLv3+)",
+    license='Apache Software License',
     zip_safe=False,
     keywords=[
         'python-3',
-        'python-3-5',
-        'python-3-6',
         'python-3-7',
+        'python-3-8',
+        'python-3-9',
+        'python-3-10',
         'dictionary',
         'parsing',
         'cp2k',
-        'plams'
+        'plams',
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Libraries',
-        'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
+        'License :: OSI Approved :: Apache Software License',
         'Natural Language :: English',
         'Programming Language :: Python :: 3 :: Only',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7'
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
+        'Typing :: Typed',
     ],
     test_suite='tests',
-    python_requires='>=3.5',
+    python_requires='>=3.7',
     install_requires=[],
     setup_requires=[
         'pytest-runner'
     ],
-    tests_require=[
-        'pytest',
-        'pytest-cov',
-        'pycodestyle'
-    ],
+    tests_require=tests_require,
     extras_require={
-        'test': ['pytest', 'pytest-cov', 'pycodestyle']
+        'test': tests_require,
     }
 )

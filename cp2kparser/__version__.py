@@ -1,1 +1,3 @@
-__version__ = '1.0.1'
+"""The CP2K-Parser version."""
+
+__version__ = '2.0.0'
