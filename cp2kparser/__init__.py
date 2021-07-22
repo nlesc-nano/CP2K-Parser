@@ -1,8 +1,4 @@
-"""
-CP2K-Parser 1.0.0
-#################
-
-A package for converting CP2K_ input files into PLAMS_ compatible dictionaries.
+"""A package for converting CP2K_ input files into PLAMS_ compatible dictionaries.
 
 Installation
 ************
@@ -13,12 +9,18 @@ CP2K-Parser can be installed as following:
 
 Usage
 *****
+.. testsetup:: python
+
+    >>> import os
+    >>> from cp2kparser.parser import _prepare_test
+    >>> filename = _prepare_test()
 
 .. code:: python
 
     >>> import cp2kparser
+    >>> from pprint import pprint
 
-    >>> filename = 'my_cp2k_input.inp'
+    >>> filename = 'my_cp2k_input.inp'  # doctest: +SKIP
     >>> print(open(filename).read())
     &FORCE_EVAL
         &DFT
@@ -65,35 +67,46 @@ Usage
             &END
         &END
     &END
-
+    <BLANKLINE>
     &GLOBAL
         PRINT_LEVEL  LOW
         PROJECT  example
         RUN_TYPE  ENERGY_FORCE
     &END
+    <BLANKLINE>
 
     >>> cp2k_dict = cp2kparser.read_input(filename)
-    >>> print(cp2k_dict)
-    {'force_eval':
-        {'dft':
-            {'basis_set_file_name': '/path/to/basis',
-             'mgrid': {'cutoff': 400, 'ngrids': 4},
-             'poisson': {},
-             'localize T': {},
-             'potential_file_name': '/path/to/potential',
-             'qs': {'method': 'GPW'},
-             'scf': {'eps_scf': '1e-06', 'max_scf': 200},
-             'xc': {'xc_functional PBE': {}}},
-        'subsys':
-            {'cell':
-                {'a': '16.11886919 0.07814137 -0.697284243',
-                 'b': '-0.215317662 4.389405268 1.408951791',
-                 'c': '-0.216126961 1.732808365 9.748961085',
-                 'periodic': 'XYZ'},
-             'kind C': {'basis_set': 'DZVP-MOLOPT-SR-GTH-q4', 'potential': 'GTH-PBE-q4'},
-             'kind H': {'basis_set': 'DZVP-MOLOPT-SR-GTH-q1', 'potential': 'GTH-PBE-q1'},
-             'topology': {'coord_file_name': './geometry.xyz', 'coordinate': 'XYZ'}}},
-    'global': {'print_level': 'LOW', 'project': 'example', 'run_type': 'ENERGY_FORCE'}}
+    >>> pprint(cp2k_dict)
+    {'force_eval': {'dft': {'basis_set_file_name': ' /path/to/basis',
+                            'localize T': {},
+                            'mgrid': {'cutoff': 400, 'ngrids': 4},
+                            'poisson': {},
+                            'potential_file_name': ' /path/to/potential',
+                            'qs': {'method': ' GPW'},
+                            'scf': {'eps_scf': ' 1e-06', 'max_scf': 200},
+                            'xc': {'xc_functional PBE': {}}},
+                    'subsys': {'cell': {'a': ' 16.11886919 0.07814137 -0.697284243',
+                                        'b': ' -0.215317662 4.389405268 '
+                                             '1.408951791',
+                                        'c': ' -0.216126961 1.732808365 '
+                                             '9.748961085',
+                                        'periodic': ' XYZ'},
+                               'kind  C': {'basis_set': ' DZVP-MOLOPT-SR-GTH-q4',
+                                           'potential': ' GTH-PBE-q4'},
+                               'kind  H': {'basis_set': ' DZVP-MOLOPT-SR-GTH-q1',
+                                           'potential': ' GTH-PBE-q1'},
+                               'topology': {'coord_file_name': ' ./geometry.xyz',
+                                            'coordinate': ' XYZ'}}},
+     'global': {'print_level': ' LOW',
+                'project': ' example',
+                'run_type': ' ENERGY_FORCE'}}
+
+.. testcleanup:: python
+
+    >>> try:
+    ...     os.remove(filename)
+    ... except PermissionError:
+    ...     pass
 
 .. _CP2K: https://www.cp2k.org/
 .. _PLAMS: https://www.scm.com/doc/plams/index.html
