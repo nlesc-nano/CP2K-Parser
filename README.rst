@@ -3,14 +3,14 @@
 
 |
 
-.. image:: https://img.shields.io/badge/python-3.5-blue.svg
-   :target: https://www.python.org
-
-.. image:: https://img.shields.io/badge/python-3.6-blue.svg
-   :target: https://www.python.org
-
 .. image:: https://img.shields.io/badge/python-3.7-blue.svg
-   :target: https://www.python.org
+   :target: https://docs.python.org/3.7/
+.. image:: https://img.shields.io/badge/python-3.8-blue.svg
+   :target: https://docs.python.org/3.8/
+.. image:: https://img.shields.io/badge/python-3.9-blue.svg
+   :target: https://docs.python.org/3.9/
+.. image:: https://img.shields.io/badge/python-3.10-blue.svg
+   :target: https://docs.python.org/3.10/
 
 CP2K-Parser 1.0.1
 #################
@@ -27,7 +27,7 @@ CP2K-Parser can be installed as following:
 Usage
 *****
 
-.. code:: python
+.. code-block:: python
 
     >>> import cp2kparser
 
