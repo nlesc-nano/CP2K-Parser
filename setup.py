@@ -17,8 +17,6 @@ with open('README.rst') as readme_file:
 tests_require = [
     'pytest',
     'pytest-cov',
-    'pytest-flake8',
-    'pytest-pydocstyle',
 ]
 
 setup(

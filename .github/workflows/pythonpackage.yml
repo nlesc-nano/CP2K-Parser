@@ -50,3 +50,30 @@ jobs:
                 with:
                     file: ./coverage.xml
                     name: codecov-umbrella
+
+    Linting:
+        runs-on: ubuntu-latest
+        steps:
+        -   uses: actions/checkout@v3
+
+        -   name: Set up Python
+            uses: actions/setup-python@v4
+            with:
+                python-version: '3.x'
+
+        -   name: Install linters
+            run: pip install pydocstyle flake8
+
+        -   name: Python info
+            run: |
+                which python
+                python --version
+
+        -   name: Installed packages
+            run: pip list
+
+        -   name: Run pydocstyle
+            run: pydocstyle cp2kparser
+
+        -   name: Run flake8
+            run: flake8 cp2kparser
